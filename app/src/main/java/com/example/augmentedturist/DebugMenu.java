@@ -1,4 +1,4 @@
-package com.example.augmentedturist.Actitivty;
+package com.example.augmentedturist;
 
 import android.os.AsyncTask;
 import android.widget.TextView;

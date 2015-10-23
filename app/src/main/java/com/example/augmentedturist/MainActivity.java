@@ -1,4 +1,4 @@
-package com.example.augmentedturist.Actitivty;
+package com.example.augmentedturist;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +20,6 @@ import com.example.augmentedturist.Data.InterestPoint;
 import com.example.augmentedturist.Engines.CameraEngine;
 import com.example.augmentedturist.Engines.LocationEngine;
 import com.example.augmentedturist.Engines.VoiceEngine;
-import com.example.augmentedturist.R;
 import com.example.augmentedturist.Views.FloatingView;
 
 import java.util.ArrayList;
