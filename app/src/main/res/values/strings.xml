@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Centros UC</string>
+    <string name="Mapa">MAP</string>
+    <string name="Centros">INVESTIGATION CENTERS</string>
+    <string name="Descicao">Description</string>
+    <string name="Contactos">CONTACTS</string>
+    <string name="Research">Research</string>
+    <string name="Competencias">Competences</string>
+    <string name="Nome">Name :</string>
+    <string name="Telefone">Phone  :</string>
+    <string name="Email">E-Mail :</string>
+    <string name="VerMais"><u>See more</u></string>
+    <string name="SearchCenter">Search Center or Category</string>
+    <string name="NoMatches">No matches</string>
+    <string name="about">About</string>
+    <string name="NotAvailable">Not Available</string>
+
+</resources>

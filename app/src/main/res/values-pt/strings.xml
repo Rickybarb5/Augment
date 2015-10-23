@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Mapa">MAPA</string>
+    <string name="Centros">CENTROS</string>
+    <string name="Descicao">Descrição</string>
+    <string name="Research">Pesquisa</string>
+    <string name="Competencias">Competências</string>
+    <string name="Nome">Nome :</string>
+    <string name="Telefone">Telefone :</string>
+    <string name="Email">E-Mail :</string>
+    <string name="VerMais"><u>Ver mais</u></string>
+    <string name="app_name">Centros UC</string>
+    <string name="SearchCenter">Search Center</string>
+    <string name="NoMatches">Sem correspondências</string>
+    <string name="about">About</string>
+    <string name="NotAvailable">Não disponível.</string>
+    <string name="Contactos">CONTACTOS</string>
+</resources>
