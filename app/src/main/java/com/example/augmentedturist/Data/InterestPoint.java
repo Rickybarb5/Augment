@@ -3,7 +3,6 @@ package com.example.augmentedturist.Data;
 import android.graphics.Bitmap;
 import android.location.Location;
 
-import com.example.augmentedturist.Threads.GetAltitude;
 
 /**
  * Created by Ricardo Barbosa on 13/09/2015.
@@ -26,7 +25,5 @@ public class InterestPoint {
         this.nome = nome;
         this.location.setLatitude(lat);
         this.location.setLongitude(lon);
-        Thread t = new Thread(new GetAltitude(this));
-        t.start();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.augmentedturist.Engines;
+package com.example.augmentedturist.providers;
 
 /**
  * Created by Ricardo Barbosa on 07/09/2015.
@@ -16,11 +16,11 @@ import java.io.IOException;
 /**
  * A basic Camera preview class
  */
-public class CameraEngine extends SurfaceView implements SurfaceHolder.Callback {
+public class CameraProvider extends SurfaceView implements SurfaceHolder.Callback {
     public Camera mCamera;
     private SurfaceHolder mHolder;
 
-    public CameraEngine(Context context, FrameLayout preview) {
+    public CameraProvider(Context context, FrameLayout preview) {
         super(context);
         mCamera = getCameraInstance();
 

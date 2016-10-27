@@ -8,8 +8,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
-import com.example.augmentedturist.Data.Data;
 import com.example.augmentedturist.Data.InterestPoint;
+import com.example.augmentedturist.Data.MainViewModel;
 import com.example.augmentedturist.R;
 
 /**
@@ -92,9 +92,9 @@ public class FloatingView extends View {
         private void setOrientation() {
             if (ip.bearingFromUser < 0) {
                 ip.bearingFromUser = 360 - Math.abs(ip.bearingFromUser);
-                orientationFromUser = Data.convertedhorizontalorientation - ip.bearingFromUser;
+                orientationFromUser = MainViewModel.userData.convertedhorizontalorientation - ip.bearingFromUser;
             } else {
-                orientationFromUser = Data.convertedhorizontalorientation - ip.bearingFromUser;
+                orientationFromUser = MainViewModel.userData.convertedhorizontalorientation - ip.bearingFromUser;
             }
             if (orientationFromUser < 0) {
                 orientationFromUser = 360 + orientationFromUser;
@@ -106,16 +106,16 @@ public class FloatingView extends View {
         }
 
         private void sety() {
-            if (Data.mylocation.getAltitude() != 0) {
-                Data.convertedverticalorientation =
+            if (MainViewModel.userData.mylocation.getAltitude() != 0) {
+                MainViewModel.userData.convertedverticalorientation =
 
-                        (Math.atan((Data.mylocation.getAltitude() - ip.location.getAltitude())//
+                        (Math.atan((MainViewModel.userData.mylocation.getAltitude() - ip.location.getAltitude())//
                                 /
-                                Math.sqrt((Data.mylocation.getAltitude() - ip.location.getAltitude() * Data.mylocation.getAltitude() - ip.location.getAltitude())
-                                        - Data.mylocation.distanceTo(ip.location) * Data.mylocation.distanceTo(ip.location)))) - Data.trueverticalorientation;
+                                Math.sqrt((MainViewModel.userData.mylocation.getAltitude() - ip.location.getAltitude() * MainViewModel.userData.mylocation.getAltitude() - ip.location.getAltitude())
+                                        - MainViewModel.userData.mylocation.distanceTo(ip.location) * MainViewModel.userData.mylocation.distanceTo(ip.location)))) - MainViewModel.userData.trueverticalorientation;
 
 
-                y = (int) Data.convertedverticalorientation * (window_h / 2 - (bitmap.getWidth() / 2)) / 30;
+                y = (int) MainViewModel.userData.convertedverticalorientation * (window_h / 2 - (bitmap.getWidth() / 2)) / 30;
             } else
                 y = window_h / 2 - (bitmap.getWidth() / 2);
         }

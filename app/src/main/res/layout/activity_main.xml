@@ -3,75 +3,7 @@
     android:id="@+id/mainlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="${relativePackage}.${activityClass}">
-
-
-    <TextView
-        android:id="@+id/latitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="New Text" />
-
-    <TextView
-        android:id="@+id/longitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/velocidade"
-        android:layout_alignBottom="@+id/velocidade"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="New Text" />
-
-    <TextView
-        android:id="@+id/velocidade"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/altitude"
-        android:text="New Text" />
-
-    <TextView
-        android:id="@+id/altitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/latitude"
-        android:text="New Text" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/longitude"
-        android:text="New Text" />
-
-    <TextView
-        android:id="@+id/txtSpeechInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="New Text" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/txtSpeechInput"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom"
-        android:clickable="true"
-        android:src="@android:drawable/ic_btn_speak_now" />
-
+    tools:context=".Views.MainView">
 
     <FrameLayout
         android:id="@+id/camera_preview"
