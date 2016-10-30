@@ -1,30 +1,56 @@
 package com.example.augmentedturist.Views;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.augmentedturist.Data.InterestPoint;
-import com.example.augmentedturist.Data.MainViewModel;
 import com.example.augmentedturist.R;
+import com.example.augmentedturist.model.MainViewModel;
 import com.example.augmentedturist.presenter.MainActivityContract;
 import com.example.augmentedturist.presenter.MainViewPresenter;
-import com.example.augmentedturist.providers.CameraProvider;
+
+import java.util.Hashtable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainView extends Activity implements MainActivityContract.MainActivityViewImpl {
 
+    private final int LOCATION_PERMISSION = 1;
+    private final int CAMERA_PERMISSION = 2;
     @BindView(R.id.mainlayout)
     RelativeLayout mainLayout;
     @BindView(R.id.camera_preview)
-    FrameLayout cameraPreview;
+    FrameLayout previewHolder;
+    @BindView(R.id.debug)
+    TextView tv;
+    private MainViewPresenter mainViewPresenter;
 
-    MainViewPresenter mainViewPresenter;
-    private CameraProvider cameraProvider;
+    private CameraPreview cameraPreview;
+
+
+    private Hashtable<String, OverlayView> floatingViewHashtable = new Hashtable<>();
+
+
+    @Override
+    public void addFloatingView(InterestPoint interestPoint) {
+        OverlayView view = new OverlayView(this, interestPoint);
+        mainLayout.addView(view);
+        floatingViewHashtable.put(interestPoint.getNome(), view);
+
+    }
+
+    @Override
+    public void removeFloatingView(String viewName) {
+        floatingViewHashtable.remove(viewName);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,37 +59,71 @@ public class MainView extends Activity implements MainActivityContract.MainActiv
         ButterKnife.bind(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        mainViewPresenter = new MainViewPresenter(this);
-        cameraProvider = new CameraProvider(this, cameraPreview);
+        mainViewPresenter = new MainViewPresenter(this, (MainViewModel) getApplication());
 
-        MainViewModel.points.add(new InterestPoint(40.186633, -8.416045, "Jardim"));
-        MainViewModel.points.add(new InterestPoint(40.207825, -8.426457, "Torre Coimbra"));
+        //TODO: Retirar depois
+        //DebugMenu debugMenu= new DebugMenu(tv);
+        //debugMenu.execute();
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_DENIED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION);
+            }
+            if (checkSelfPermission(Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_DENIED) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION);
+            } else {
+
+                // Create our Preview view and set it as the content of our activity.
+                // cameraPreview = new CameraPreview(this);
+                // previewHolder.addView(cameraPreview);
+
+            }
+        }
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        mainViewPresenter.registerSensors();
-    }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                cameraPreview = new CameraPreview(this, getWindowManager().getDefaultDisplay().getRotation());
+                mainViewPresenter.registerLocation();
+                mainViewPresenter.registerSensors();
+                previewHolder.addView(cameraPreview);
+            } else {
+                finish();
+            }
+        } else {
+            cameraPreview = new CameraPreview(this, getWindowManager().getDefaultDisplay().getRotation());
+            mainViewPresenter.registerSensors();
+            mainViewPresenter.registerLocation();
+            previewHolder.addView(cameraPreview);
+        }
+
+    }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mainViewPresenter.unregisterSensors();
-    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
-
-    @Override
-    public void refreshInterestPoints() {
-
-        //Temporario
-        FloatingView view = new FloatingView(this, MainViewModel.points.get(0));
-        FloatingView view2 = new FloatingView(this, MainViewModel.points.get(1));
-        mainLayout.addView(view);
-        mainLayout.addView(view2);
-
+                mainViewPresenter.unregisterLocation();
+                mainViewPresenter.unregisterSensors();
+            } else {
+                finish();
+            }
+        } else {
+            mainViewPresenter.unregisterSensors();
+            mainViewPresenter.unregisterLocation();
+        }
 
     }
 

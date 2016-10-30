@@ -1,26 +1,43 @@
 package com.example.augmentedturist.presenter;
 
+import com.example.augmentedturist.Data.InterestPoint;
+
 /**
  * Created by ricky on 27/10/2016.
  */
 
 public interface MainActivityContract {
 
+
     interface MainActivityViewImpl {
-        void refreshInterestPoints();
+        void addFloatingView(InterestPoint interestPoint);
+
+        void removeFloatingView(String name);
     }
 
     interface MainActivityPresenterImpl {
-        void updateInterestPoints();
+
+        void updateInterestPoints(InterestPoint interestPoint);
 
         void registerSensors();
-
         void unregisterSensors();
+
+        void registerLocation();
+
+        void unregisterLocation();
     }
 
     interface MainActivityModelImpl {
-        void registerSensors();
 
+        void interestPointUpdated();
+
+
+        void registerSensors();
         void unregisterSensors();
+
+        void registerLocation();
+
+        void unregisterLocation();
+
     }
 }

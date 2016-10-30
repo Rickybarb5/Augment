@@ -9,21 +9,34 @@ import android.location.Location;
  */
 public class InterestPoint {
 
-    public String nome = "";
+    private String nome = "";
     //Point location
-    public Location location = new Location("");
-    //Bearing em relação ao user
-    public double bearingFromUser = 0;
-    //Distancia em relação ao user
-    public double distanceFromUser = 0;
+    private Location location = new Location("");
     //Imagem do ponto
-    public Bitmap icon;
+    private Bitmap icon;
     //Descrição
-    public String descricao = "";
+    private String descricao = "";
 
     public InterestPoint(double lat, double lon, String nome) {
         this.nome = nome;
         this.location.setLatitude(lat);
         this.location.setLongitude(lon);
+        this.location.setAltitude(1916.5d);
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public Bitmap getIcon() {
+        return icon;
     }
 }

@@ -5,8 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-
-import com.example.augmentedturist.Data.MainViewModel;
+import android.util.Log;
 
 /**
  * Created by ricky on 27/10/2016.
@@ -15,15 +14,39 @@ import com.example.augmentedturist.Data.MainViewModel;
 public class OrientationProvider implements SensorEventListener {
 
 
-    public SensorManager sensorManager;
-    public Sensor orientation;
-    float[] output = new float[3];
-    float[] values;
+    private static final float ALPHA = 0.15f;
+    public static float orientation[] = new float[3];
+    private SensorManager sensorManager;
+    //private Sensor gyroSensor ;
+    private Sensor accelSensor;
+    private Sensor compassSensor;
+    private float rotation[] = new float[9];
+    private float identity[] = new float[9];
+    private float[] lastAccelerometer = new float[3];
+    private float[] lastCompass = new float[3];
 
+    public OrientationProvider(Context context) {
 
-    public OrientationProvider() {
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        compassSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        //  gyroSensor = sensors.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+    }
+
+    public void registerSensor() {
+        sensorManager.registerListener(this, accelSensor, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, compassSensor, SensorManager.SENSOR_DELAY_GAME);
+        //sensorManager.registerListener(this, gyroSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        Log.d("Sensor", "Sensors registered");
 
     }
+
+    public void unregisterSensor() {
+        sensorManager.unregisterListener(this);
+        Log.d("Sensor", "Sensors unregistered");
+    }
+
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -31,24 +54,98 @@ public class OrientationProvider implements SensorEventListener {
 
     public void onSensorChanged(SensorEvent event) {
 
-        //Melhora os resultados dos sensores
-        output = exponentialSmoothing(event.values, output, Float.parseFloat("0.2"));
-//output=event.values;
-        //Atribui orientação
-        MainViewModel.userData.truehorizontalorientation = Math.round(output[0]);
-        MainViewModel.userData.trueverticalorientation = Math.round(output[1]);
-        //Transforma a orientação de Portrait para landscape
-        double transformedh = MainViewModel.userData.truehorizontalorientation + 90;
-        if (transformedh > 360) {
-            transformedh = Math.abs(360 - transformedh);
+
+        boolean gotRotation = SensorManager.getRotationMatrix(rotation,
+                identity, lastAccelerometer, lastCompass);
+        switch (event.sensor.getType()) {
+
+            case Sensor.TYPE_ROTATION_VECTOR:
+
+                break;
+            case Sensor.TYPE_MAGNETIC_FIELD:
+                lastCompass = exponentialSmoothing(event.values, lastCompass, ALPHA);
+                break;
+            case Sensor.TYPE_ACCELEROMETER:
+                lastAccelerometer = exponentialSmoothing(event.values, lastAccelerometer, ALPHA);
+
+                break;
         }
-        MainViewModel.userData.convertedhorizontalorientation = transformedh;
-        double transformedv = MainViewModel.userData.trueverticalorientation + 90;
-        if (transformedv > 360) {
-            transformedv = Math.abs(360 - transformedv);
+        if (gotRotation) {
+            float cameraRotation[] = new float[9];
+            // remap such that the camera is pointing straight down the Y axis
+            SensorManager.remapCoordinateSystem(rotation, SensorManager.AXIS_X,
+                    SensorManager.AXIS_Z, cameraRotation);
+
+            // orientation vector
+            orientation = new float[3];
+            SensorManager.getOrientation(cameraRotation, orientation);
+
+          /*  if (gotRotation) {
+                cameraRotation = new float[9];
+                // remap such that the camera is pointing along the positive direction of the Y axis
+                SensorManager.remapCoordinateSystem(rotation, SensorManager.AXIS_X,
+                        SensorManager.AXIS_Z, cameraRotation);
+
+                // orientation vector
+
+                orientation = new float[3];
+                SensorManager.getOrientation(cameraRotation, orientation);
+            }*/
         }
-        MainViewModel.userData.convertedverticalorientation = transformedv;
+
     }
+
+  /*  public void onSensorChanged(SensorEvent event) {
+
+
+        switch (mScreenRotation) {
+            case Surface.ROTATION_0:
+                axisX = SensorManager.AXIS_X;
+                axisY = SensorManager.AXIS_Y;
+                break;
+
+            case Surface.ROTATION_90:
+                axisX = SensorManager.AXIS_Y;
+                axisY = SensorManager.AXIS_MINUS_X;
+                break;
+
+            case Surface.ROTATION_180:
+                axisX = SensorManager.AXIS_MINUS_X;
+                axisY = SensorManager.AXIS_MINUS_Y;
+                break;
+
+            case Surface.ROTATION_270:
+                axisX = SensorManager.AXIS_MINUS_Y;
+                axisY = SensorManager.AXIS_X;
+                break;
+
+            default:
+                break;
+        }
+    }
+        if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
+            return;
+        }
+
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)  lastAccelerometer = event.values.clone ();
+        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)  lastCompass= event.values.clone ();
+
+        if (lastAccelerometer  != null && lastCompass != null) {
+
+            float[] rotationMatrixA = mRotationMatrixA;
+            if (SensorManager.getRotationMatrix(rotationMatrixA, null, lastAccelerometer , lastCompass )) {
+
+                float[] rotationMatrixB = mRotationMatrixB;
+                SensorManager.remapCoordinateSystem(rotationMatrixA,
+                        SensorManager.AXIS_X, SensorManager.AXIS_Z,
+                        rotationMatrixB);
+                float[] dv = new float[3];
+                SensorManager.getOrientation(rotationMatrixB, dv);
+                // add to smoothing filter
+                fd.AddLatest((double)dv[0]);
+            }
+
+        }*/
 
     private float[] exponentialSmoothing(float[] input, float[] output, float alpha) {
         if (output == null)
@@ -59,12 +156,5 @@ public class OrientationProvider implements SensorEventListener {
         return output;
     }
 
-    public void registerSensor(Context context) {
-        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        orientation = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-    }
 
-    public void unregisterSensor() {
-        sensorManager.unregisterListener(this);
-    }
 }
