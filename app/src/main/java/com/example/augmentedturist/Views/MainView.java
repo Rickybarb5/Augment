@@ -31,6 +31,7 @@ public class MainView extends Activity implements MainActivityContract.MainActiv
     FrameLayout previewHolder;
     @BindView(R.id.debug)
     TextView tv;
+
     private MainViewPresenter mainViewPresenter;
 
     private CameraPreview cameraPreview;
@@ -50,6 +51,16 @@ public class MainView extends Activity implements MainActivityContract.MainActiv
     @Override
     public void removeFloatingView(String viewName) {
         floatingViewHashtable.remove(viewName);
+    }
+
+    @Override
+    public void doneLoading(String message) {
+
+    }
+
+    @Override
+    public void startLoading(String message) {
+
     }
 
     @Override
@@ -127,5 +138,9 @@ public class MainView extends Activity implements MainActivityContract.MainActiv
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cameraPreview.releaseCamera();
+    }
 }

@@ -11,11 +11,15 @@ public interface MainActivityContract {
 
     interface MainActivityViewImpl {
         void addFloatingView(InterestPoint interestPoint);
-
         void removeFloatingView(String name);
+
+        void doneLoading(String message);
+
+        void startLoading(String message);
     }
 
     interface MainActivityPresenterImpl {
+
 
         void updateInterestPoints(InterestPoint interestPoint);
 
@@ -25,6 +29,8 @@ public interface MainActivityContract {
         void registerLocation();
 
         void unregisterLocation();
+
+
     }
 
     interface MainActivityModelImpl {

@@ -35,6 +35,8 @@ public class LocationProvider implements LocationListener {
     public void onLocationChanged(Location location) {
         //Localização
         UserData.mylocation = location;
+
+        Log.d("Location", "Current location: " + location.getAltitude() + " , " + location.getLongitude());
     }
 
     @Override

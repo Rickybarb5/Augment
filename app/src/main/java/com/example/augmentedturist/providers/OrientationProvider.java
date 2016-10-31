@@ -14,7 +14,7 @@ import android.util.Log;
 public class OrientationProvider implements SensorEventListener {
 
 
-    private static final float ALPHA = 0.15f;
+    private static final float ALPHA = 0.1f;
     public static float orientation[] = new float[3];
     private SensorManager sensorManager;
     //private Sensor gyroSensor ;
@@ -80,72 +80,9 @@ public class OrientationProvider implements SensorEventListener {
             orientation = new float[3];
             SensorManager.getOrientation(cameraRotation, orientation);
 
-          /*  if (gotRotation) {
-                cameraRotation = new float[9];
-                // remap such that the camera is pointing along the positive direction of the Y axis
-                SensorManager.remapCoordinateSystem(rotation, SensorManager.AXIS_X,
-                        SensorManager.AXIS_Z, cameraRotation);
-
-                // orientation vector
-
-                orientation = new float[3];
-                SensorManager.getOrientation(cameraRotation, orientation);
-            }*/
         }
 
     }
-
-  /*  public void onSensorChanged(SensorEvent event) {
-
-
-        switch (mScreenRotation) {
-            case Surface.ROTATION_0:
-                axisX = SensorManager.AXIS_X;
-                axisY = SensorManager.AXIS_Y;
-                break;
-
-            case Surface.ROTATION_90:
-                axisX = SensorManager.AXIS_Y;
-                axisY = SensorManager.AXIS_MINUS_X;
-                break;
-
-            case Surface.ROTATION_180:
-                axisX = SensorManager.AXIS_MINUS_X;
-                axisY = SensorManager.AXIS_MINUS_Y;
-                break;
-
-            case Surface.ROTATION_270:
-                axisX = SensorManager.AXIS_MINUS_Y;
-                axisY = SensorManager.AXIS_X;
-                break;
-
-            default:
-                break;
-        }
-    }
-        if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
-            return;
-        }
-
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)  lastAccelerometer = event.values.clone ();
-        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)  lastCompass= event.values.clone ();
-
-        if (lastAccelerometer  != null && lastCompass != null) {
-
-            float[] rotationMatrixA = mRotationMatrixA;
-            if (SensorManager.getRotationMatrix(rotationMatrixA, null, lastAccelerometer , lastCompass )) {
-
-                float[] rotationMatrixB = mRotationMatrixB;
-                SensorManager.remapCoordinateSystem(rotationMatrixA,
-                        SensorManager.AXIS_X, SensorManager.AXIS_Z,
-                        rotationMatrixB);
-                float[] dv = new float[3];
-                SensorManager.getOrientation(rotationMatrixB, dv);
-                // add to smoothing filter
-                fd.AddLatest((double)dv[0]);
-            }
-
-        }*/
 
     private float[] exponentialSmoothing(float[] input, float[] output, float alpha) {
         if (output == null)
