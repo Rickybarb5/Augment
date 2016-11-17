@@ -10,6 +10,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyAaMIb7upgOQn1Pi9XDSgYP-pvMwJCvpK0" />
+
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="23" />

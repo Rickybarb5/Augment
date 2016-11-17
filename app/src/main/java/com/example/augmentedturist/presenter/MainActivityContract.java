@@ -27,7 +27,6 @@ public interface MainActivityContract {
         void unregisterSensors();
 
         void registerLocation();
-
         void unregisterLocation();
 
 
@@ -37,12 +36,10 @@ public interface MainActivityContract {
 
         void interestPointUpdated();
 
-
         void registerSensors();
         void unregisterSensors();
 
         void registerLocation();
-
         void unregisterLocation();
 
     }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.augmentedturist.Data.InterestPoint;
 import com.example.augmentedturist.R;
+import com.example.augmentedturist.Views.overlayView.OverlayView;
 import com.example.augmentedturist.model.MainViewModel;
 import com.example.augmentedturist.presenter.MainActivityContract;
 import com.example.augmentedturist.presenter.MainViewPresenter;
